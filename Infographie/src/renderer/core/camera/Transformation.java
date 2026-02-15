@@ -65,9 +65,9 @@ public class Transformation {
             
             // compute translation
             // TODO
-            tempWorldToCamera.set(1,4,eye.getX());
-            tempWorldToCamera.set(2,4,eye.getY());
-            tempWorldToCamera.set(3,4,eye.getZ());
+            tempWorldToCamera.set(1,4,-x.dot(eye));
+            tempWorldToCamera.set(2,4,-y.dot(eye));
+            tempWorldToCamera.set(3,4,-z.dot(eye));
 
             this.worldToCamera = tempWorldToCamera;
 
@@ -81,11 +81,10 @@ public class Transformation {
     /**
      * Sets the projection matrix.
      */
-    public void setProjection(Matrix proj) {
+    public void setProjection() {
         // TODO
-
-        this.projection = proj;
-
+        Matrix P = Matrix.createIdentity("P", 4);
+        this.projection = P;
 
         System.out.println("Projection matrix:\n" + projection);
     }
@@ -99,10 +98,24 @@ public class Transformation {
     public void setCalibration(double focal, double width, double height) {
 
         // TODO
+        double cx = width / 2.0;
+        double cy = height / 2.0;
 
+        Matrix K = Matrix.createIdentity(3);
 
+        K.set(1,1,focal);
+        K.set(1,2,0);
+        K.set(1,3,cx);
 
+        K.set(2,1,0);
+        K.set(2,2,focal);
+        K.set(2,3,cy);
 
+        K.set(3,1,0);
+        K.set(3,2,0);
+        K.set(3,3,1);
+
+        this.calibration = K;
 
         System.out.println("Calibration matrix:\n" + calibration);
     }
