@@ -83,7 +83,18 @@ public class Transformation {
      */
     public void setProjection() {
         // TODO
-        Matrix P = Matrix.createIdentity("P", 4);
+        Matrix P = new Matrix("P", 3, 4);
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (i == j) {
+                    P.set(i, j, 1);
+                } else {
+                    P.set(i, j, 0);
+                }
+            }
+            
+        }
         this.projection = P;
 
         System.out.println("Projection matrix:\n" + projection);
@@ -133,8 +144,9 @@ public class Transformation {
         // TODO
         Vector ps = new Vector(3);
 
-
-
+        ps = worldToCamera.multiply(p);
+        ps = projection.multiply(ps);
+        ps = calibration.multiply(ps);
 
         return ps;
     }
