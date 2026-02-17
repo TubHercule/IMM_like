@@ -263,52 +263,41 @@ public class Rasterizer {
         if (Math.abs(triangleArea(v1, v2, v3)) < minArea) {
             return;
         }
-        final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
+        final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);        
 
         // iterate over the triangle's bounding box
         // TODO
+        final int xMin = Math.min(Math.min(v1.getX(), v2.getX()), v3.getX());
+        final int xMax = Math.max(Math.max(v1.getX(), v2.getX()), v3.getX());
+        final int yMin = Math.min(Math.min(v1.getY(), v2.getY()), v3.getY());
+        final int yMax = Math.max(Math.max(v1.getY(), v2.getY()), v3.getY());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        Fragment current = new Fragment(xMin, yMin);
+        for (int x=xMin; x<xMax; x++) {
+            for (int y=yMin; y<yMax; y++) {
+                current.setPosition(x, y);
+                // Alpha Beta Gamma
+                Vector abg = cMat.multiply(new Vector(1, x, y));
+                double alpha = abg.getX();
+                double beta = abg.getY();
+                double gamma = abg.getZ();
+                // Fragment pas dans le triangle
+                if (alpha < 0 || beta < 0 || gamma < 0) continue;
+                
+                final int numAttributes = current.getNumAttributes();
+                for (int i = 0; i < numAttributes; i++) {
+                    double interpolated = alpha * v1.getAttribute(i)
+                                        + beta * v2.getAttribute(i)
+                                        + gamma * v3.getAttribute(i);
+                    if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                        // clamp the color between 0 and 1;
+                        interpolated = MathUtils.clamp(interpolated, 0., 1.);
+                    }
+                    current.setAttribute(i, interpolated);
+                }
+                shader.shade(current);
+            }
+        }
 
     }
 }
