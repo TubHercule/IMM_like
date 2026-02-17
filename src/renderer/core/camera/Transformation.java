@@ -58,16 +58,16 @@ public class Transformation {
             tempWorldToCamera.set(2,1,y.getX());
             tempWorldToCamera.set(2,2,y.getY());
             tempWorldToCamera.set(2,3,y.getZ());
-            tempWorldToCamera.set(3,1,z.getX());
-            tempWorldToCamera.set(3,2,z.getY());
-            tempWorldToCamera.set(3,3,z.getZ());
+            tempWorldToCamera.set(3,1,-z.getX());
+            tempWorldToCamera.set(3,2,-z.getY());
+            tempWorldToCamera.set(3,3,-z.getZ());
 
             
             // compute translation
             // TODO
             tempWorldToCamera.set(1,4,-x.dot(eye));
             tempWorldToCamera.set(2,4,-y.dot(eye));
-            tempWorldToCamera.set(3,4,-z.dot(eye));
+            tempWorldToCamera.set(3,4,z.dot(eye));
 
             this.worldToCamera = tempWorldToCamera;
 
@@ -114,17 +114,17 @@ public class Transformation {
 
         Matrix K = Matrix.createIdentity(3);
 
+        K.set(0,0,focal);
+        K.set(0,1,0);
+        K.set(0,2,cx);
+
+        K.set(1,0,0);
         K.set(1,1,focal);
-        K.set(1,2,0);
-        K.set(1,3,cx);
+        K.set(1,2,cy);
 
+        K.set(2,0,0);
         K.set(2,1,0);
-        K.set(2,2,focal);
-        K.set(2,3,cy);
-
-        K.set(3,1,0);
-        K.set(3,2,0);
-        K.set(3,3,1);
+        K.set(2,2,1);
 
         this.calibration = K;
 
@@ -143,8 +143,13 @@ public class Transformation {
     public Vector projectPoint(Vector p) throws SizeMismatchException {
         // TODO
         Vector ps = new Vector(3);
+        Vector p2 = new Vector(4);
+        p2.set(0, p.getX());
+        p2.set(1, p.getY());
+        p2.set(2, p.getZ());
+        p2.set(3, 1.0);
 
-        ps = worldToCamera.multiply(p);
+        ps = worldToCamera.multiply(p2);
         ps = projection.multiply(ps);
         ps = calibration.multiply(ps);
 
