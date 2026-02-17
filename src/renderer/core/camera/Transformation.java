@@ -46,7 +46,6 @@ public class Transformation {
     public void setLookAt(final Vector eye, final Vector lookAtPoint, final Vector up) {
         try {
             // compute rotation
-            // TODO
             Vector z = lookAtPoint.subtract(eye).normalize();
             Vector x = up.cross(z).normalize();
             Vector y = z.cross(x).normalize();
@@ -63,7 +62,6 @@ public class Transformation {
 
             
             // compute translation
-            // TODO
             this.worldToCamera.set(0,3,-x.dot(eye));
             this.worldToCamera.set(1,3,-y.dot(eye));
             this.worldToCamera.set(2,3,-z.dot(eye));
@@ -101,7 +99,6 @@ public class Transformation {
      */
     public void setCalibration(double focal, double width, double height) {
 
-        // TODO
         double cx = width / 2.0;
         double cy = height / 2.0;
 
@@ -130,7 +127,7 @@ public class Transformation {
      * @throws SizeMismatchException if the size of the input vector is not 3
      */
     public Vector projectPoint(Vector p) throws SizeMismatchException {
-        // TODO
+
         Vector p2 = new Vector(4);
         p2.set(0, p.getX());
         p2.set(1, p.getY());
