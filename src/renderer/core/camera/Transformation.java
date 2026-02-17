@@ -135,14 +135,13 @@ public class Transformation {
      */
     public Vector projectPoint(Vector p) throws SizeMismatchException {
         // TODO
-        Vector ps = new Vector(3);
         Vector p2 = new Vector(4);
         p2.set(0, p.getX());
         p2.set(1, p.getY());
         p2.set(2, p.getZ());
         p2.set(3, 1.0);
 
-        ps = worldToCamera.multiply(p2);
+        Vector ps = worldToCamera.multiply(p2);
         ps = projection.multiply(ps);
         ps = calibration.multiply(ps);
 
