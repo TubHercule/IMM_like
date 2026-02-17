@@ -51,22 +51,22 @@ public class Transformation {
             Vector x = up.cross(z).normalize();
             Vector y = z.cross(x).normalize();
 
-            this.worldToCamera.set(1,1,x.getX());
-            this.worldToCamera.set(1,2,x.getY());
-            this.worldToCamera.set(1,3,x.getZ());
-            this.worldToCamera.set(2,1,y.getX());
-            this.worldToCamera.set(2,2,y.getY());
-            this.worldToCamera.set(2,3,y.getZ());
-            this.worldToCamera.set(3,1,-z.getX());
-            this.worldToCamera.set(3,2,-z.getY());
-            this.worldToCamera.set(3,3,-z.getZ());
+            this.worldToCamera.set(0,0,x.getX());
+            this.worldToCamera.set(1,0,x.getY());
+            this.worldToCamera.set(2,0,x.getZ());
+            this.worldToCamera.set(0,1,y.getX());
+            this.worldToCamera.set(1,1,y.getY());
+            this.worldToCamera.set(2,1,y.getZ());
+            this.worldToCamera.set(0,2,-z.getX());
+            this.worldToCamera.set(1,2,-z.getY());
+            this.worldToCamera.set(2,2,-z.getZ());
 
             
             // compute translation
             // TODO
-            this.worldToCamera.set(1,4,-x.dot(eye));
-            this.worldToCamera.set(2,4,-y.dot(eye));
-            this.worldToCamera.set(3,4,z.dot(eye));
+            this.worldToCamera.set(0,3,-x.dot(eye));
+            this.worldToCamera.set(1,3,-y.dot(eye));
+            this.worldToCamera.set(2,3,z.dot(eye));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,6 +141,14 @@ public class Transformation {
         ps = projection.multiply(ps);
         ps = calibration.multiply(ps);
 
+        double depth = ps.getZ(); 
+        if (depth != 0) {
+            return new Vector(
+                ps.getX() / depth, 
+                ps.getY() / depth, 
+                depth // On garde la profondeur brute en Z comme demandé
+            );
+        }
         return ps;
     }
 
