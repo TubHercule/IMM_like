@@ -64,7 +64,7 @@ public class Transformation {
             
             // compute translation
             // TODO
-            this.worldToCamera.set(0,3,x.dot(eye));
+            this.worldToCamera.set(0,3,-x.dot(eye));
             this.worldToCamera.set(1,3,-y.dot(eye));
             this.worldToCamera.set(2,3,-z.dot(eye));
 
