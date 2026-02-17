@@ -51,25 +51,22 @@ public class Transformation {
             Vector x = up.cross(z).normalize();
             Vector y = z.cross(x).normalize();
 
-            Matrix tempWorldToCamera = Matrix.createIdentity(4);
-            tempWorldToCamera.set(1,1,x.getX());
-            tempWorldToCamera.set(1,2,x.getY());
-            tempWorldToCamera.set(1,3,x.getZ());
-            tempWorldToCamera.set(2,1,y.getX());
-            tempWorldToCamera.set(2,2,y.getY());
-            tempWorldToCamera.set(2,3,y.getZ());
-            tempWorldToCamera.set(3,1,-z.getX());
-            tempWorldToCamera.set(3,2,-z.getY());
-            tempWorldToCamera.set(3,3,-z.getZ());
+            this.worldToCamera.set(1,1,x.getX());
+            this.worldToCamera.set(1,2,x.getY());
+            this.worldToCamera.set(1,3,x.getZ());
+            this.worldToCamera.set(2,1,y.getX());
+            this.worldToCamera.set(2,2,y.getY());
+            this.worldToCamera.set(2,3,y.getZ());
+            this.worldToCamera.set(3,1,-z.getX());
+            this.worldToCamera.set(3,2,-z.getY());
+            this.worldToCamera.set(3,3,-z.getZ());
 
             
             // compute translation
             // TODO
-            tempWorldToCamera.set(1,4,-x.dot(eye));
-            tempWorldToCamera.set(2,4,-y.dot(eye));
-            tempWorldToCamera.set(3,4,z.dot(eye));
-
-            this.worldToCamera = tempWorldToCamera;
+            this.worldToCamera.set(1,4,-x.dot(eye));
+            this.worldToCamera.set(2,4,-y.dot(eye));
+            this.worldToCamera.set(3,4,z.dot(eye));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,21 +109,17 @@ public class Transformation {
         double cx = width / 2.0;
         double cy = height / 2.0;
 
-        Matrix K = Matrix.createIdentity(3);
+        calibration.set(0,0,focal);
+        calibration.set(0,1,0);
+        calibration.set(0,2,cx);
 
-        K.set(0,0,focal);
-        K.set(0,1,0);
-        K.set(0,2,cx);
+        calibration.set(1,0,0);
+        calibration.set(1,1,focal);
+        calibration.set(1,2,cy);
 
-        K.set(1,0,0);
-        K.set(1,1,focal);
-        K.set(1,2,cy);
-
-        K.set(2,0,0);
-        K.set(2,1,0);
-        K.set(2,2,1);
-
-        this.calibration = K;
+        calibration.set(2,0,0);
+        calibration.set(2,1,0);
+        calibration.set(2,2,1);
 
         System.out.println("Calibration matrix:\n" + calibration);
     }
