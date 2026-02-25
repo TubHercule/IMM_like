@@ -258,6 +258,11 @@ public class Rasterizer {
     public void rasterizeFace(final Fragment v1, final Fragment v2, final Fragment v3)
             throws SizeMismatchException {
 
+        // Edges
+        rasterizeEdge(v1, v2);
+        rasterizeEdge(v2, v3);
+        rasterizeEdge(v3, v1);
+
         // early exit if the triangle is too small
         final double minArea = 1e-6;
         if (Math.abs(triangleArea(v1, v2, v3)) < minArea) {
