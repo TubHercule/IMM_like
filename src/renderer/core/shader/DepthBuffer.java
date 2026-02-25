@@ -66,8 +66,12 @@ public class DepthBuffer {
      */
     public boolean testFragment(Fragment f) {
         if (isWithinBounds(f)) {
-            // TODO
-            return false;
+            double currentDepth = buffer.get(f.getY(), f.getX());
+            if (f.getDepth() < currentDepth) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -80,7 +84,9 @@ public class DepthBuffer {
      */
     public void writeFragment(Fragment f) {
         if (isWithinBounds(f)) {
-            // TODO
+            if (testFragment(f)) {
+                buffer.set(f.getY(), f.getX(), f.getDepth());
+            }
         }
     }
 
