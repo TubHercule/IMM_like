@@ -67,11 +67,7 @@ public class DepthBuffer {
     public boolean testFragment(Fragment f) {
         if (isWithinBounds(f)) {
             double currentDepth = buffer.get(f.getY(), f.getX());
-            if (f.getDepth() < currentDepth) {
-                return true;
-            } else {
-                return false;
-            }
+            return f.getDepth() < currentDepth;
         } else {
             return false;
         }
