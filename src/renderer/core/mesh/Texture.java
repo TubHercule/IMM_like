@@ -46,11 +46,15 @@ public class Texture {
      * @return the color of the texture at (u,v)
      */
     public Color sample(double u, double v) {
-        // TODO
-
-
-
-
-        return new Color (0,0,0);
+        // Position of the pixel within the image
+        int x = (int) (u * width) % width;
+        int y = (int) (v * height) % height;
+        // RGB value of the pixel at (x,y)
+        int rgb = image.getRGB(x, y);
+        // Extract red, green and blue values with bit shift and bitwise AND
+        int r = (rgb >> 16) & 0xFF;
+        int g = (rgb >> 8) & 0xFF;
+        int b = rgb & 0xFF;
+        return new Color (r, g, b);
     }
 }
