@@ -151,17 +151,17 @@ public class Mesh {
         // across faces to the vertex.
         final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
         for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
-            // TODO
             Vector n = new Vector(3);
-
-
-
-
-
-
-
-
-
+            // compute the normal of the face
+            for (int j = 0; j < VERTICES_PER_FACE; j++) {
+                // 2 vectors of the face
+                Vector vj = vertices[faces[i + j]];
+                Vector vjp1 = vertices[faces[i + (j + 1) % VERTICES_PER_FACE]];
+                // add them the accumulated normal of the face
+                n = n.add(vj.cross(vjp1));
+            }
+            // normalize at the end
+            n = n.normalize();
 
             // add the calculated normal n to each vertex of the face
             for (int j = 0; j < VERTICES_PER_FACE; j++) {
