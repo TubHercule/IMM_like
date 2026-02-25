@@ -37,31 +37,23 @@ public class PointLight extends Light {
 
     @Override
     public double getContribution(Vector position, Vector normal, double[] color,
-            Vector cameraPosition, double ka, double kd, double ks, double s) {
-        double I = 0;
-
+                                  Vector cameraPosition, double ka, double kd, double ks, double s) {
         // vector from point to camera center
-        Vector e = cameraPosition.subtract(position);
-        e = e.normalize();
+        Vector e = cameraPosition.subtract(position).normalize();
 
         // vector from point to light
-        Vector l = getPositionAsVector().subtract(position);
-        l = l.normalize();
+        Vector l = getPositionAsVector().subtract(position).normalize();
 
         // half-vector between e and l
-        Vector h = e.add(l);
-        h = h.normalize();
+        Vector h = e.add(l).normalize();
 
         // diffuse contribution
-        // TODO
-        // double I_diffuse = ...;
+        // Scalar product of normalized vectors is their cosine
+        double I_diffuse = intensity * ka * normal.dot(l);
 
         // specular contribution
-        // TODO
-        // double I_specular = ...;
-        // I += I_diffuse + I_specular;
-
-        return I;
+        double I_specular = intensity * ks * Math.pow(normal.dot(h), s);
+        return I_diffuse + I_specular;
     }
 
     private Vector getPositionAsVector() {
