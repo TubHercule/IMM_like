@@ -2,7 +2,6 @@ package renderer.core.shader;
 
 import java.awt.Color;
 
-import renderer.algebra.MathUtils;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
 import renderer.core.mesh.Texture;
@@ -83,28 +82,16 @@ public class TextureShader extends Shader {
         }
         // The Fragment may not have texture coordinates
         try {
-            // TODO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            double u = fragment.getAttribute(START_TEXTURE_ATTRIBUTE);
+            double v = fragment.getAttribute(START_TEXTURE_ATTRIBUTE + 1);
+            Color color = texture.sample(u, v);
+            if (combineWithBaseColor) {
+                int r = (color.getRed() + fragment.getColor().getRed()) / 2;
+                int g = (color.getGreen() + fragment.getColor().getGreen()) / 2;
+                int b = (color.getBlue() + fragment.getColor().getBlue()) / 2;
+                color = new Color(r, g, b);
+            }
+            screen.setPixel(fragment.getX(), fragment.getY(), color);
         } catch (ArrayIndexOutOfBoundsException e) {
             screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
         }
